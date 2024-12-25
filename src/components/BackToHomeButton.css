@@ -1,0 +1,17 @@
+.back-to-home {
+    margin: 20px;
+    text-align: left;
+}
+
+.back-to-home a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+}
+
+.back-to-home .home-icon {
+    margin-right: 10px;
+    font-size: 1.5rem;
+}
