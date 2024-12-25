@@ -1,20 +1,33 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { setDoc, doc } from "firebase/firestore";
-import { auth, db } from "./firebaseConfig";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
-// Função para registrar um usuário
-export const registerUser = async (email, password, userData) => {
+const auth = getAuth();
+
+export const registerUser = async (email, password) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-
-    // Salvar dados adicionais no Firestore
-    await setDoc(doc(db, "users", user.uid), userData);
-
-    console.log("Usuário registrado e dados salvos!");
-    return user;
+    return userCredential.user;
   } catch (error) {
     console.error("Erro ao registrar usuário:", error.message);
+    throw error;
+  }
+};
+
+export const loginUser = async (email, password) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    return userCredential.user;
+  } catch (error) {
+    console.error("Erro ao fazer login:", error.message);
+    throw error;
+  }
+};
+
+export const logoutUser = async () => {
+  try {
+    await signOut(auth);
+    console.log("Logout realizado com sucesso!");
+  } catch (error) {
+    console.error("Erro ao fazer logout:", error.message);
     throw error;
   }
 };

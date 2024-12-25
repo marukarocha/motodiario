@@ -1,41 +1,24 @@
-import React, { useState } from "react";
-import { registerUser } from "../../DB/firebaseServices"; // Caminho corrigido
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../../Auth/AuthContext';
 
 const Register = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const { register } = useContext(AuthContext);
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    try {
-      await registerUser(email, password);
-      alert("Usuário registrado com sucesso!");
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        await register(email, password);
+    };
 
-  return (
-    <form onSubmit={handleRegister}>
-      <input
-        type="email"
-        placeholder="E-mail"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <input
-        type="password"
-        placeholder="Senha"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <button type="submit">Registrar</button>
-      {error && <p>{error}</p>}
-    </form>
-  );
+    return (
+        <form onSubmit={handleRegister}>
+            <h2>Register</h2>
+            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <button type="submit">Register</button>
+        </form>
+    );
 };
 
 export default Register;
