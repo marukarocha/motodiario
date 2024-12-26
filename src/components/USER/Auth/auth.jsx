@@ -1,4 +1,4 @@
-import { auth } from "../components/DB/firebase";
+import { auth } from "../../DB/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
