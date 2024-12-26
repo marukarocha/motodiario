@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom'; // Importe useNavigate
 import { useAuth } from './components/USER/Auth/AuthContext';
 import Home from './components/HOME/Home';
 import DayRegister from './components/DIARIA/DayRegister';
@@ -11,8 +11,7 @@ import Maintenance from './components/Maintenance';
 import Collaborate from './components/Collaborate';
 import ConfigPage from './components/USER/CONFIG/ConfigPage';
 import Header from './components/TPARTS/Header';
-import Login from './components/USER/REGISTER/Login';
-import Register from './components/USER/REGISTER/Register';
+import LandingPage from './pages/LandingPage';
 
 function App() {
   const { currentUser } = useAuth();
@@ -23,15 +22,26 @@ function App() {
         <Header userName={currentUser?.email || "Visitante"} />
         <header className="App-header">
           <Routes>
-            <Route path="/" element={!currentUser ? (
-              <>
-                <Login />
-                <Register />
-              </>
-            ) : (
-              <Navigate to="/home" />
-            )} />
-            <Route path="/home" element={currentUser ? <Home /> : <Navigate to="/" />} />
+            <Route
+              path="/"
+              element={
+                !currentUser ? (
+                  <LandingPage />
+                ) : (
+                  <Navigate to="/home" replace={true} />
+                )
+              }
+            />
+            <Route
+              path="/home"
+              element={
+                currentUser ? (
+                  <Home />
+                ) : (
+                  <Navigate to="/" replace={true} />
+                )
+              }
+            />
             <Route path="/day-register" element={<DayRegister />} />
             <Route path="/config-panel" element={<ConfigPanel />} />
             <Route path="/graph-panel" element={<GraphPanel />} />

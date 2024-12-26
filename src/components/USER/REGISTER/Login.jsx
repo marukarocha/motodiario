@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { auth } from "../../DB/firebaseServices";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from 'react-router-dom'; // Importe useNavigate
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate(); // Use o hook useNavigate
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -18,6 +20,7 @@ function Login() {
       setLoading(false);
       // Substitua pelo redirecionamento real para a página principal
       console.log("Usuário logado com sucesso!");
+      navigate('/home'); // Redireciona para /home após o login
     } catch (error) {
       setLoading(false);
       if (error.code === "auth/user-not-found") {
@@ -35,7 +38,7 @@ function Login() {
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
-        <div className="col-md-6">
+        <div className="col-md-12">
           <div className="card shadow">
             <div className="card-body">
               <h2 className="card-title text-center mb-4">Login</h2>
