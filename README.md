@@ -120,14 +120,17 @@ MotoDiario is a Progressive Web Application (PWA) designed for motorbike deliver
    ```
 
 ---
-Documentação para o Projeto
+# Documentação para o Projeto
 
 Este documento descreve a estrutura de pastas atualizada do projeto, explica as mudanças realizadas e orienta sobre como outros desenvolvedores podem contribuir.
 
-Estrutura de Pastas Atualizada
+---
 
-Diretório src/
+## Estrutura de Pastas Atualizada
 
+### Diretório `src/`
+
+```
 src/
 ├── App.css                 // Estilo global
 ├── App.js                  // Componente raiz
@@ -170,88 +173,78 @@ src/
 ├── logo.svg                // Logo em SVG
 ├── reportWebVitals.js      // Ferramenta de medição de desempenho
 └── setupTests.js           // Configurações de testes
+```
 
-Componentes Atualizados ou Novos
+---
 
-AuthContext.jsx
+## Componentes Atualizados ou Novos
 
-Mesclado a partir de USER/Auth/AuthContext.jsx e USER/Auth/auth.jsx.
+### **AuthContext.jsx**
+- Mesclado a partir de USER/Auth/AuthContext.jsx e USER/Auth/auth.jsx.
+- Implementa funções de login e logout.
 
-Implementa funções de login e logout.
+### **Bike/**
+- **RegisterBike.jsx**: Permite o registro de dados sobre a moto do usuário.
+- **ViewBike.jsx**: Exibe os dados registrados sobre a moto.
 
-Bike/
+### **DB/firebaseServices.js**
+- Mescla funções anteriores de interação com o Firestore.
+- Inclui novas funções para Earnings, Fuelings e Maintenances.
 
-RegisterBike.jsx: Permite o registro de dados sobre a moto do usuário.
+### **Earnings/**
+- **RegisterEarnings.jsx**: Formulário para registro de ganhos.
+- **ListEarnings.jsx**: Exibe e consulta ganhos registrados.
 
-ViewBike.jsx: Exibe os dados registrados sobre a moto.
+### **Fuelings/**
+- **RegisterFueling.jsx**: Formulário para registrar abastecimentos.
+- **ListFuelings.jsx**: Exibe e consulta registros de abastecimento.
 
-DB/firebaseServices.js
+### **Maintenances/**
+- **RegisterMaintenance.jsx**: Formulário para registrar manutenções.
+- **ListMaintenances.jsx**: Exibe e consulta registros de manutenções.
 
-Mescla funções anteriores de interação com o Firestore.
+---
 
-Inclui novas funções para Earnings, Fuelings e Maintenances.
+## Contribuição
 
-Earnings/
+### **Requisitos**
+- Node.js 16+
+- Firebase SDK configurado
 
-RegisterEarnings.jsx: Formulário para registro de ganhos.
+### **Passos para Configuração**
+1. Clone o repositório:
+   ```bash
+   git clone <URL-do-repositório>
+   ```
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+3. Configure as credenciais do Firebase em `src/components/DB/firebaseServices.js`.
 
-ListEarnings.jsx: Exibe e consulta ganhos registrados.
+### **Padrões de Código**
+- **Estilo**: Utilize ESLint e Prettier para uniformizar o código.
+- **Commits**: Escreva mensagens de commit descritivas em inglês.
 
-Fuelings/
+### **Como Contribuir**
+1. Crie um branch para sua contribuição:
+   ```bash
+   git checkout -b feature/nova-funcionalidade
+   ```
+2. Desenvolva e teste sua funcionalidade.
+3. Abra um Pull Request detalhando as mudanças realizadas.
 
-RegisterFueling.jsx: Formulário para registrar abastecimentos.
+---
 
-ListFuelings.jsx: Exibe e consulta registros de abastecimento.
+## Roadmap Futuro
 
-Maintenances/
+1. Finalizar a implementação dos novos componentes.
+2. Criar testes unitários para os novos componentes.
+3. Melhorar a documentação sobre integração com o Firebase.
 
-RegisterMaintenance.jsx: Formulário para registrar manutenções.
+Com essa estrutura e orientações, o projeto está preparado para crescer e receber contribuições de outros desenvolvedores.
 
-ListMaintenances.jsx: Exibe e consulta registros de manutenções.
 
-Contribuição
-
-Requisitos
-
-Node.js 16+
-
-Firebase SDK configurado
-
-Passos para Configuração
-
-Clone o repositório:
-
-git clone <URL-do-repositório>
-
-Instale as dependências:
-
-npm install
-
-Configure as credenciais do Firebase em src/components/DB/firebaseServices.js.
-
-Padrões de Código
-
-Estilo: Utilize ESLint e Prettier para uniformizar o código.
-
-Commits: Escreva mensagens de commit descritivas em inglês.
-
-Como Contribuir
-
-Crie um branch para sua contribuição:
-
-git checkout -b feature/nova-funcionalidade
-
-Desenvolva e teste sua funcionalidade.
-
-Abra um Pull Request detalhando as mudanças realizadas.
-
-Roadmap Futuro
-
-Finalizar a implementação dos novos componentes.
-
-Criar testes unitários para os novos componentes.
-
-Melhorar a documentação sobre integração com o Firebase.
 
 Com essa estrutura e orientações, o projeto está preparado para crescer e receber contribuições de outros desenvolvedores.
 
