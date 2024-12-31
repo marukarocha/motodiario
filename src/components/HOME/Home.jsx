@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Dropdown, DropdownButton, Card, Row, Col, Form } from 'react-bootstrap';
-import { FaList, FaChartBar, FaPlay, FaMapMarkerAlt, FaCalendarPlus, FaCog, FaTools, FaHandsHelping, FaClock, FaDollarSign } from 'react-icons/fa';
+import { FaList, FaChartBar, FaPlay, FaMapMarkerAlt, FaMotorcycle, FaCalendarPlus, FaCog, FaTools, FaHandsHelping, FaClock, FaDollarSign } from 'react-icons/fa';
 import { FaOilCan, FaCogs, FaGasPump } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import './Home.css';
 
 import WeatherClock from "../WEATHER/Tempo";
-import Motivation from "../USER/Motivation";
-import StartDayButton from '../DIARIA/StartDayButton'; // Certifique-se de ajustar o caminho
+import Motivation from "./Motivation";
 
 import GPSDistanceTracker from "../GPS/GPSDistanceTracker";
 import WeatherCard from "../WEATHER/WeatherCard";
@@ -105,8 +104,6 @@ const Home = () => {
             <GPSDistanceTracker />
         </div>
             
-            <Motivation />
-
             <div className="mb-4 d-flex align-items-center justify-content-between">
                 <DropdownButton title={`Período: ${selectedPeriod}`} onSelect={handlePeriodChange}>
                     <Dropdown.Item eventKey="Semana">Semana</Dropdown.Item>
@@ -157,11 +154,12 @@ const Home = () => {
 
             <Row className="button-grid">
                 {[
-                    { to: "/list", icon: FaList, text: "Lista" },
+                    { to: "/listar-ganhos", icon: FaList, text: "Lista" },
                     { to: "/graph-panel", icon: FaChartBar, text: "Gráficos" },
-                    { to: "/day-register", icon: FaCalendarPlus, text: "Registrar" },
+                    { to: "/registrar-ganhos", icon: FaCalendarPlus, text: "Registrar" },
                     { to: "/config", icon: FaCog, text: "Configurações" },
                     { to: "/maintenance", icon: FaTools, text: "Manutenção" },
+                    { to: "/Registrar", icon: FaMotorcycle, text: "Config Moto" },
                     { to: "/collaborate", icon: FaHandsHelping, text: "Colabore" },
                 ].map((item, idx) => (
                     <Col sm={6} md={4} lg={3} key={idx} className="menu-button">
@@ -200,6 +198,8 @@ const Home = () => {
         </Col>
           ))}
       </Row>
+      <Motivation />
+
         </div>
 
      

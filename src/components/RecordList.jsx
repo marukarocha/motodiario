@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
 import { collection, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from './DB/firebase'; // Certifique-se do caminho correto
-import BackToHomeButton from './BackToHomeButton';
+import BackToHomeButton from './UI/BackToHomeButton';
 import { format, parseISO } from 'date-fns';
 
 const RecordList = () => {

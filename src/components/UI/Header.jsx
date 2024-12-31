@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import logo from '../../logo.png';
 import Navbar from 'react-bootstrap/Navbar';
-import Button from 'react-bootstrap/Button'; // Importe o Button do react-bootstrap
-import { useAuth } from '../USER/Auth/AuthContext'; // Importe o useAuth
+import Button from 'react-bootstrap/Button';
+import { useAuth } from '../USER/Auth/AuthContext';
+import { auth as authInstance } from '../DB/firebaseServices'; // Renomeie o auth importado para authInstance
+import { signOut } from 'firebase/auth';
 import "./Header.css";
 
 const Header = ({ userName }) => {
   const [currentDate, setCurrentDate] = useState("");
   const [currentTime, setCurrentTime] = useState("");
-  const auth = useAuth(); 
+  const authContext = useAuth(); // Mantenha authContext para o contexto
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,16 +27,20 @@ const Header = ({ userName }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleLogout = () => {
-    auth.setCurrentUser(null);
-    localStorage.removeItem('user');
-    navigate('/');
+  const handleLogout = async () => {
+    try {
+      await signOut(authInstance); // Use authInstance para o signOut do Firebase
+      authContext.setCurrentUser(null);
+      localStorage.removeItem('user');
+      navigate('/');
+    } catch (error) {
+      console.error("Erro ao fazer logout:", error);
+    }
   };
-
 
   return (
     <Navbar className="bg-body-tertiary">
-      <Navbar.Brand href="/"> {/* Use "/" para a página inicial */}
+      <Navbar.Brand href="/">
         <img
           alt="Logo do Moto Diário"
           src={logo}
@@ -48,10 +54,10 @@ const Header = ({ userName }) => {
           <strong>{currentDate}</strong> <strong>{currentTime}</strong>
         </p>
         <p>
-          Bem-vindo, <strong>{userName || "Usuário"}</strong>!
+          Bem-vindo, <strong>{authContext.currentUser?.email || "Usuário"}</strong>! {/* Use authContext.currentUser */}
         </p>
       </div>
-      {auth.currentUser && ( // Linha 54 corrigida: use auth.currentUser
+      {authContext.currentUser && ( // Use authContext.currentUser
         <Button variant="danger" onClick={handleLogout} className="logout-button">
           Logout
         </Button>

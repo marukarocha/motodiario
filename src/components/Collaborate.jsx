@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import BackToHomeButton from './BackToHomeButton';
+import BackToHomeButton from './UI/BackToHomeButton';
 import { Form, Button } from 'react-bootstrap';
 
 const Collaborate = () => {

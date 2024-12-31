@@ -10,8 +10,11 @@ import RecordList from './components/RecordList';
 import Maintenance from './components/Maintenance';
 import Collaborate from './components/Collaborate';
 import ConfigPage from './components/USER/CONFIG/ConfigPage';
-import Header from './components/TPARTS/Header';
+import Header from './components/UI/Header';
+import RegistrarGanhos from './components/Earnings/RegisterEarnings'; // Importe o componente
 import LandingPage from './pages/LandingPage';
+import ListEarnings from './components/Earnings/ListEarnings'; // Importe o componente
+import RegisterBike from './components/BIKE/RegisterBike'; // Importe o componente
 
 function App() {
   const { currentUser } = useAuth();
@@ -49,6 +52,9 @@ function App() {
             <Route path="/maintenance" element={<Maintenance />} />
             <Route path="/collaborate" element={<Collaborate />} />
             <Route path="/config" element={<ConfigPage />} />
+            <Route path="/registrar-ganhos" element={<RegistrarGanhos />} />
+            <Route path="/listar-ganhos" element={<ListEarnings/>} />
+            <Route path="/registrar" element={<RegisterBike/>} />
           </Routes>
         </header>
         <footer>
