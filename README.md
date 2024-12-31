@@ -120,21 +120,132 @@ MotoDiario is a Progressive Web Application (PWA) designed for motorbike deliver
    ```
 
 ---
+# Documentação para o Projeto
 
-### Project Structure
+Este documento descreve a estrutura de pastas atualizada do projeto, explica as mudanças realizadas e orienta sobre como outros desenvolvedores podem contribuir.
+
+---
+
+## Estrutura de Pastas Atualizada
+
+### Diretório `src/`
 
 ```
-public/
-├── icons/       # Custom icons for PWA
 src/
-├── components/
-│   ├── Auth/     # Authentication components (Login, Register)
-│   ├── Dashboard/
-│   ├── Forms/    # Data entry forms
-│   ├── Graphs/   # Data visualization components
-│   ├── Alerts/   # Alert messages and modals
-│   └── DB/       # Firebase services
-├── App.js       # Main application file
-├── index.js     # React entry point
+├── App.css                 // Estilo global
+├── App.js                  // Componente raiz
+├── App.test.js             // Testes unitários
+├── components/             // Componentes reutilizáveis
+│   ├── Auth/               // Lógica e componentes de autenticação
+│   │   ├── AuthContext.jsx  // Contexto de autenticação (inclui funções de login/logout)
+│   ├── Bike/               // Componentes relacionados à moto
+│   │   ├── RegisterBike.jsx // Formulário para registrar dados da moto
+│   │   └── ViewBike.jsx     // Visualização dos dados da moto
+│   ├── DB/                 // Lógica de interação com o banco de dados Firebase
+│   │   └── firebaseServices.js // Funções gerais para comunicação com o Firestore
+│   ├── Earnings/           // Registro e consulta de ganhos
+│   │   ├── RegisterEarnings.jsx // Formulário de registro
+│   │   └── ListEarnings.jsx    // Listagem e consulta
+│   ├── Fuelings/           // Registro e consulta de abastecimentos
+│   │   ├── RegisterFueling.jsx // Formulário de registro
+│   │   └── ListFuelings.jsx    // Listagem e consulta
+│   ├── Maintenances/       // Registro e consulta de manutenções
+│   │   ├── RegisterMaintenance.jsx // Formulário de registro
+│   │   └── ListMaintenances.jsx    // Listagem e consulta
+│   ├── UI/                 // Componentes de interface do usuário
+│   │   ├── Header.jsx       // Cabeçalho com suporte a logout
+│   │   ├── BackToHomeButton.jsx // Botão para retornar à página inicial
+│   │   └── SummaryCard.js  // Cartão resumo de dados
+│   ├── GPS/                // Componentes de rastreamento de distância
+│   │   ├── calculateDistance.js
+│   │   ├── GPSDistanceTracker.jsx
+│   │   └── useGPS.js
+│   ├── WEATHER/            // Componentes relacionados à meteorologia
+│   │   ├── tempo.css
+│   │   ├── Tempo.jsx
+│   │   ├── useWeather.js
+│   │   └── WeatherCard.jsx
+├── pages/                  // Páginas principais
+│   └── LandingPage.jsx     // Página de entrada com login e registro
+├── index.css               // Estilos globais
+├── index.js                // Ponto de entrada da aplicação
+├── logo.png                // Logo
+├── logo.svg                // Logo em SVG
+├── reportWebVitals.js      // Ferramenta de medição de desempenho
+└── setupTests.js           // Configurações de testes
 ```
+
+---
+
+## Componentes Atualizados ou Novos
+
+### **AuthContext.jsx**
+- Mesclado a partir de USER/Auth/AuthContext.jsx e USER/Auth/auth.jsx.
+- Implementa funções de login e logout.
+
+### **Bike/**
+- **RegisterBike.jsx**: Permite o registro de dados sobre a moto do usuário.
+- **ViewBike.jsx**: Exibe os dados registrados sobre a moto.
+
+### **DB/firebaseServices.js**
+- Mescla funções anteriores de interação com o Firestore.
+- Inclui novas funções para Earnings, Fuelings e Maintenances.
+
+### **Earnings/**
+- **RegisterEarnings.jsx**: Formulário para registro de ganhos.
+- **ListEarnings.jsx**: Exibe e consulta ganhos registrados.
+
+### **Fuelings/**
+- **RegisterFueling.jsx**: Formulário para registrar abastecimentos.
+- **ListFuelings.jsx**: Exibe e consulta registros de abastecimento.
+
+### **Maintenances/**
+- **RegisterMaintenance.jsx**: Formulário para registrar manutenções.
+- **ListMaintenances.jsx**: Exibe e consulta registros de manutenções.
+
+---
+
+## Contribuição
+
+### **Requisitos**
+- Node.js 16+
+- Firebase SDK configurado
+
+### **Passos para Configuração**
+1. Clone o repositório:
+   ```bash
+   git clone <URL-do-repositório>
+   ```
+2. Instale as dependências:
+   ```bash
+   npm install
+   ```
+3. Configure as credenciais do Firebase em `src/components/DB/firebaseServices.js`.
+
+### **Padrões de Código**
+- **Estilo**: Utilize ESLint e Prettier para uniformizar o código.
+- **Commits**: Escreva mensagens de commit descritivas em inglês.
+
+### **Como Contribuir**
+1. Crie um branch para sua contribuição:
+   ```bash
+   git checkout -b feature/nova-funcionalidade
+   ```
+2. Desenvolva e teste sua funcionalidade.
+3. Abra um Pull Request detalhando as mudanças realizadas.
+
+---
+
+## Roadmap Futuro
+
+1. Finalizar a implementação dos novos componentes.
+2. Criar testes unitários para os novos componentes.
+3. Melhorar a documentação sobre integração com o Firebase.
+
+Com essa estrutura e orientações, o projeto está preparado para crescer e receber contribuições de outros desenvolvedores.
+
+
+
+Com essa estrutura e orientações, o projeto está preparado para crescer e receber contribuições de outros desenvolvedores.
+
 
