@@ -23,9 +23,6 @@ const Home = () => {
 
     const { location, error } = useGPS();
    
-
-
-
     // Simulação de dados
     useEffect(() => {
         const records = [
