@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import CurrencyInput from 'react-currency-input-field';
+import { Form, Button } from 'react-bootstrap';
+import Cleave from 'cleave.js/react';
 
 const EarningConfig = ({ saveData }) => {
     const [monthlyGoal, setMonthlyGoal] = useState('');
@@ -44,24 +45,24 @@ const EarningConfig = ({ saveData }) => {
     const calculateCosts = (cost) => {
         if (!cost.value) return { monthlyCost: 0, annualCost: 0 };
 
-        const value = parseFloat(cost.value.replace(/[^0-9.-]+/g, '')) || 0;
+        const value = parseFloat(cost.value.replace(/[^0-9.-]+/g, '')) || 0; // Trata o valor para aceitar formatos de moeda
         let monthlyCost = 0;
 
         switch (cost.frequency) {
             case 'quinzenal':
-                monthlyCost = value * 2; // Quinzenal: 2 vezes no mês
+                monthlyCost = value * 2;
                 break;
             case 'mensal':
-                monthlyCost = value; // Mensal: valor direto
+                monthlyCost = value;
                 break;
             case 'anual':
-                monthlyCost = value / 12; // Anual: divide o valor por 12 meses
+                monthlyCost = value / 12;
                 break;
             default:
                 monthlyCost = 0;
         }
 
-        const annualCost = monthlyCost * 12; // Custo anual é sempre o mensal multiplicado por 12
+        const annualCost = monthlyCost * 12;
         return { monthlyCost, annualCost };
     };
 
@@ -71,34 +72,40 @@ const EarningConfig = ({ saveData }) => {
                 <h5>Financeiro</h5>
             </div>
             <div className="d-flex row">
-            <div className="form-group col-6">
-                <label>Meta Mensal (R$):</label>
-                <CurrencyInput
-                    className="form-control"
-                    value={monthlyGoal}
-                    onValueChange={(value) => setMonthlyGoal(value)}
-                    placeholder="Digite sua meta mensal"
-                    prefix="R$ "
-                    decimalsLimit={2}
-                />
-            </div>
-            <div className="form-group col-6">
-                <label>Horas Desejadas por Dia:</label>
-                <input
-                    type="number"
-                    className="form-control"
-                    value={dailyHours}
-                    onChange={(e) => setDailyHours(e.target.value)}
-                    placeholder="Digite as horas de trabalho por dia"
-                />
-            </div>
+                <div className="form-group col-6">
+                    <Form.Label>Meta Mensal (R$):</Form.Label>
+                    <Cleave
+                        options={{
+                            prefix: 'R$ ',
+                            numeral: true,
+                            numeralThousandsGroupStyle: 'thousand',
+                            numeralDecimalScale: 2,
+                            numeralDecimalMark: ',',
+                            delimiter: '.',
+                        }}
+                        className="form-control"
+                        value={monthlyGoal}
+                        onChange={(e) => setMonthlyGoal(e.target.rawValue)}
+                        placeholder="Digite sua meta mensal"
+                    />
+                </div>
+                <div className="form-group col-6">
+                    <Form.Label>Horas Desejadas por Dia:</Form.Label>
+                    <Form.Control
+                        type="number"
+                        className="form-control"
+                        value={dailyHours}
+                        onChange={(e) => setDailyHours(e.target.value)}
+                        placeholder="Digite as horas de trabalho por dia"
+                    />
+                </div>
             </div>
             <div className="form-group">
-                <label>Custos Fixos:</label>
+                <Form.Label>Custos Fixos:</Form.Label>
                 {fixedCosts.map((cost) => (
                     <div key={cost.id} className="mb-3">
                         <div className="d-flex align-items-center mb-2">
-                            <input
+                            <Form.Control
                                 type="text"
                                 className="form-control me-2"
                                 placeholder="Descrição (ex: IPVA)"
@@ -107,17 +114,23 @@ const EarningConfig = ({ saveData }) => {
                                     updateFixedCost(cost.id, 'description', e.target.value)
                                 }
                             />
-                            <CurrencyInput
+                            <Cleave
+                                options={{
+                                    prefix: 'R$ ',
+                                    numeral: true,
+                                    numeralThousandsGroupStyle: 'thousand',
+                                    numeralDecimalScale: 2,
+                                    numeralDecimalMark: ',',
+                                    delimiter: '.',
+                                }}
                                 className="form-control me-2"
                                 placeholder="Valor (R$)"
-                                prefix="R$ "
-                                decimalsLimit={2}
                                 value={cost.value}
-                                onValueChange={(value) =>
-                                    updateFixedCost(cost.id, 'value', value)
+                                onChange={(e) =>
+                                    updateFixedCost(cost.id, 'value', e.target.rawValue)
                                 }
                             />
-                            <select
+                            <Form.Select
                                 className="form-control me-2"
                                 value={cost.frequency}
                                 onChange={(e) =>
@@ -127,13 +140,13 @@ const EarningConfig = ({ saveData }) => {
                                 <option value="mensal">Mensal</option>
                                 <option value="quinzenal">Quinzenal</option>
                                 <option value="anual">Anual</option>
-                            </select>
-                            <button
-                                className="btn btn-danger"
+                            </Form.Select>
+                            <Button
+                                variant="danger"
                                 onClick={() => removeFixedCost(cost.id)}
                             >
                                 Remover
-                            </button>
+                            </Button>
                         </div>
                         <div>
                             <small>Gasto Mensal: R$ {cost.monthlyCost.toFixed(2)}</small> |{' '}
@@ -141,13 +154,13 @@ const EarningConfig = ({ saveData }) => {
                         </div>
                     </div>
                 ))}
-                <button className="btn btn-secondary mt-2" onClick={addFixedCost}>
+                <Button variant="secondary" className="mt-2" onClick={addFixedCost}>
                     Adicionar Custo Fixo
-                </button>
+                </Button>
             </div>
-            <button className="btn btn-primary mt-3" onClick={handleSave}>
+            <Button variant="primary" className="mt-3" onClick={handleSave}>
                 Salvar
-            </button>
+            </Button>
         </div>
     );
 };

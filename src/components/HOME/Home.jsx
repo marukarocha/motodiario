@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Dropdown, DropdownButton, Card, Row, Col, Form } from 'react-bootstrap';
+import { Button, Dropdown, DropdownButton, Card, Row, Col, Form, Modal } from 'react-bootstrap';
 import { FaList, FaChartBar, FaPlay, FaMapMarkerAlt, FaMotorcycle, FaCalendarPlus, FaCog, FaTools, FaHandsHelping, FaClock, FaDollarSign } from 'react-icons/fa';
 import { FaOilCan, FaCogs, FaGasPump } from 'react-icons/fa';
-import Swal from 'sweetalert2';
 import './Home.css';
+
+//Abastecimento
+import RegisterFueling from '../Fuelings/RegisterFueling';
+
 
 import WeatherClock from "../WEATHER/Tempo";
 import Motivation from "./Motivation";
@@ -23,6 +26,20 @@ const Home = () => {
 
     const { location, error } = useGPS();
    
+    // Abastacimento
+
+    const [showFuelModal, setShowFuelModal] = useState(false);
+    
+    const handleFuelRegister = () => {
+        setShowFuelModal(true);
+    };
+
+    const handleCloseFuelModal = () => {
+        setShowFuelModal(false);
+        // Recupere os dados do formulário aqui, se necessário
+    }
+
+
     // Simulação de dados
     useEffect(() => {
         const records = [
@@ -41,23 +58,12 @@ const Home = () => {
 
     const handlePeriodChange = (period) => setSelectedPeriod(period);
 
-    const handleFuelRegister = () => Swal.fire({
-        title: 'Abastecimento',
-        text: 'Você adicionou combustível com sucesso!',
-        icon: 'info',
-        confirmButtonText: 'Entendido',
-    });
-
     const cities = ["florianopolis"]; // Adicione as cidades desejadas
     const apiKey = "066eac4caf7b914446a3c2088682a1bb";
     
     return (
        
         <div className="home-container">
-
-
-            
-           
 
             <div className="row">
             <div className="widgets-container col-4">
@@ -84,13 +90,24 @@ const Home = () => {
             </Button>
 
             {/* Botão Registrar Abastecimento */}
-            <Button 
-                variant="warning" 
+            <Button
+                variant="warning"
                 className="btn-icon"
                 onClick={handleFuelRegister}
             >
                 <FaGasPump className="me-2" /> Registrar Abastecimento
             </Button>
+
+            {/* ... outro código */}
+
+            <Modal show={showFuelModal} onHide={handleCloseFuelModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Registrar Abastecimento</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <RegisterFueling onClose={handleCloseFuelModal} /> {/* Removido userId={userId} */}
+                </Modal.Body>
+            </Modal>
 
             {/* Botão GPS */}
             <Button variant="info" className="btn-icon">
@@ -152,6 +169,7 @@ const Home = () => {
             <Row className="button-grid">
                 {[
                     { to: "/listar-ganhos", icon: FaList, text: "Lista" },
+                    { to: "/listar-abastecimento", icon: FaList, text: "Lista" },
                     { to: "/graph-panel", icon: FaChartBar, text: "Gráficos" },
                     { to: "/registrar-ganhos", icon: FaCalendarPlus, text: "Registrar" },
                     { to: "/config", icon: FaCog, text: "Configurações" },

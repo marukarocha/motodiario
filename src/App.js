@@ -14,7 +14,9 @@ import Header from './components/UI/Header';
 import RegistrarGanhos from './components/Earnings/RegisterEarnings'; // Importe o componente
 import LandingPage from './pages/LandingPage';
 import ListEarnings from './components/Earnings/ListEarnings'; // Importe o componente
+import ListFuelings from './components/Fuelings/ListFuelings'; // Importe o componente
 import RegisterBike from './components/BIKE/RegisterBike'; // Importe o componente
+import ViewBike from './components/BIKE/ViewBike'; // Importe o componente
 
 function App() {
   const { currentUser } = useAuth();
@@ -54,7 +56,9 @@ function App() {
             <Route path="/config" element={<ConfigPage />} />
             <Route path="/registrar-ganhos" element={<RegistrarGanhos />} />
             <Route path="/listar-ganhos" element={<ListEarnings/>} />
+            <Route path="/listar-abastecimento" element={<ListFuelings/>} />
             <Route path="/registrar" element={<RegisterBike/>} />
+            <Route path="/view-bike" element={<ViewBike/>} />
           </Routes>
         </header>
         <footer>

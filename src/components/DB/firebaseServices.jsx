@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, query, where, orderBy } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, setDoc, getDoc, query, where, orderBy } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -24,18 +24,44 @@ async function addEarning(userId, earning) {
 }
 
 // Função para obter os ganhos de um usuário
-async function getEarnings(userId) {
-  const userRef = doc(db, 'users', userId);
-  const earningsRef = collection(userRef, 'earnings');
-  const q = query(earningsRef, orderBy('date', 'desc')); // Exemplo: ordenar por data decrescente
-  const querySnapshot = await getDocs(q);
-  const earnings = [];
-  querySnapshot.forEach((doc) => {
-    earnings.push({ id: doc.id, ...doc.data() });
-  });
-  return earnings;
+async function getEarnings(userId, startDate = null, endDate = null) {
+  try {
+      let q = collection(db, 'users', userId, 'earnings');
+
+      if (startDate && endDate) {
+          // Ajuste para considerar a hora nas datas de filtro
+          const start = new Date(startDate);
+          start.setHours(0, 0, 0, 0); // Define a hora para o início do dia
+          const end = new Date(endDate);
+          end.setHours(23, 59, 59, 999); // Define a hora para o final do dia
+
+          q = query(q, where('date', '>=', start), where('date', '<=', end), orderBy('date', 'desc'));
+      } else {
+          q = query(q, orderBy('date', 'desc'));
+      }
+
+      const querySnapshot = await getDocs(q);
+      const earnings = [];
+      querySnapshot.forEach((doc) => {
+          earnings.push({ id: doc.id, ...doc.data() });
+      });
+      return earnings;
+  } catch (error) {
+      console.error("Erro ao buscar ganhos:", error);
+      throw error;
+  }
 }
 
+// Função para deletar um ganho
+async function deleteEarning(userId, earningId) {
+    try {
+        const earningRef = doc(db, 'users', userId, 'earnings', earningId);
+        await deleteDoc(earningRef);
+    } catch (error) {
+        console.error("Erro ao deletar ganho:", error);
+        throw error;
+    }
+}
 
 
 // Função para adicionar uma manutenção
@@ -86,6 +112,46 @@ async function obterDadosMoto(userId) {
   }
 }
 
+// src/components/DB/firebaseServices.jsx
+async function addFueling(userId, fuelingData) {
+  try {
+      // Adiciona o abastecimento como uma subcoleção do usuário
+      const fuelingRef = await addDoc(collection(db, 'users', userId, 'abastecimentos'), fuelingData);
+      return fuelingRef.id;
+  } catch (error) {
+      console.error("Erro ao adicionar abastecimento:", error);
+      throw error;
+  }
+}
+
+
+async function getFuelings(userId, filterDate = null) {
+  try {
+      let q = collection(db, 'users', userId, 'abastecimentos');
+
+      if (filterDate) {
+          const startOfDay = new Date(filterDate);
+          startOfDay.setHours(0, 0, 0, 0); // Começo do dia
+          const endOfDay = new Date(filterDate);
+          endOfDay.setHours(23, 59, 59, 999); // Fim do dia
+
+          q = query(q, where('data', '>=', startOfDay.toLocaleDateString('pt-BR')), where('data', '<=', endOfDay.toLocaleDateString('pt-BR')), orderBy('data', 'desc'));
+      } else {
+          q = query(q, orderBy('data', 'desc'));
+      }
+
+      const querySnapshot = await getDocs(q);
+      const fuelings = [];
+      querySnapshot.forEach((doc) => {
+          fuelings.push({ id: doc.id, ...doc.data() });
+      });
+      return fuelings;
+  } catch (error) {
+      console.error("Erro ao buscar abastecimentos:", error);
+      throw error;
+  }
+}
+
 export { 
   db, 
   auth, 
@@ -93,7 +159,11 @@ export {
   addDoc, 
   getDocs, 
   addEarning, 
+  deleteEarning,
   getEarnings, 
   registerBike, 
-  getBikeData 
+  getBikeData,
+  addFueling,
+  getFuelings
+ 
 };
