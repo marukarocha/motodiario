@@ -152,6 +152,65 @@ async function getFuelings(userId, filterDate = null) {
   }
 }
 
+// Função para salvar as configurações do usuário
+async function saveUserConfig(userId, configData) {
+  const userRef = doc(db, 'users', userId);
+  // Salva os dados na subcoleção 'configurations', documento 'user'
+  await setDoc(doc(userRef, 'configurations', 'user'), configData, { merge: true });
+}
+
+// Função para salvar as configurações de ganhos do usuário
+async function saveEarningsConfig(userId, configData) {
+  const userRef = doc(db, 'users', userId);
+  // Salva os dados na subcoleção 'configurations', documento 'earnings'
+  await setDoc(doc(userRef, 'configurations', 'earnings'), configData, { merge: true });
+}
+
+// Função para salvar as configurações do aplicativo do usuário
+async function saveAppConfig(userId, configData) {
+  const userRef = doc(db, 'users', userId);
+  // Salva os dados na subcoleção 'configurations', documento 'app'
+  await setDoc(doc(userRef, 'configurations', 'app'), configData, { merge: true });
+}
+
+// Função para obter as configurações do usuário
+async function getUserConfig(userId) {
+  const userRef = doc(db, 'users', userId);
+  const configRef = doc(userRef, 'configurations', 'user');
+  const docSnap = await getDoc(configRef);
+  if (docSnap.exists()) {
+      return docSnap.data();
+  } else {
+      return null;
+  }
+}
+
+// Função para obter as configurações de ganhos do usuário
+async function getEarningsConfig(userId) {
+  const userRef = doc(db, 'users', userId);
+  const configRef = doc(userRef, 'configurations', 'earnings');
+  const docSnap = await getDoc(configRef);
+  if (docSnap.exists()) {
+      return docSnap.data();
+  } else {
+      return null;
+  }
+}
+
+// Função para obter as configurações do aplicativo do usuário
+async function getAppConfig(userId) {
+  const userRef = doc(db, 'users', userId);
+  const configRef = doc(userRef, 'configurations', 'app');
+  const docSnap = await getDoc(configRef);
+  if (docSnap.exists()) {
+      return docSnap.data();
+  } else {
+      return null;
+  }
+}
+
+
+
 export { 
   db, 
   auth, 
@@ -164,6 +223,12 @@ export {
   registerBike, 
   getBikeData,
   addFueling,
-  getFuelings
+  getFuelings,
+  saveUserConfig,
+  saveEarningsConfig,
+  saveAppConfig,
+  getUserConfig,
+  getEarningsConfig,
+  getAppConfig
  
 };

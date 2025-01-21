@@ -4,16 +4,20 @@ import { Button, Dropdown, DropdownButton, Card, Row, Col, Form, Modal } from 'r
 import { FaList, FaChartBar, FaPlay, FaMapMarkerAlt, FaMotorcycle, FaCalendarPlus, FaCog, FaTools, FaHandsHelping, FaClock, FaDollarSign } from 'react-icons/fa';
 import { FaOilCan, FaCogs, FaGasPump } from 'react-icons/fa';
 import './Home.css';
-
+import Swal from 'sweetalert2';
+import { AuthProvider } from '../USER/Auth/AuthContext'; // Importe o AuthProvider
+import { createRoot } from 'react-dom/client';
+import { findDOMNode } from 'react-dom';
 //Abastecimento
 import RegisterFueling from '../Fuelings/RegisterFueling';
 
+//card home 
+import UserInfoCard from './UserInfoCard'; // Importe o novo componente
+import WeatherTimerCard from './WeatherTimerCard'; // Importe o novo componente
 
-import WeatherClock from "../WEATHER/Tempo";
 import Motivation from "./Motivation";
 
 import GPSDistanceTracker from "../GPS/GPSDistanceTracker";
-import WeatherCard from "../WEATHER/WeatherCard";
 import { useGPS } from '../GPS/useGPS'; // Named export
 
 const Home = () => {
@@ -26,19 +30,37 @@ const Home = () => {
 
     const { location, error } = useGPS();
    
-    // Abastacimento
 
-    const [showFuelModal, setShowFuelModal] = useState(false);
-    
+
+    // Registro de abastecimento
+
     const handleFuelRegister = () => {
-        setShowFuelModal(true);
+        Swal.fire({
+            title: 'Registrar Abastecimento',
+            html: '<div id="swal-fueling-form"></div>',
+            showCloseButton: true,
+            showConfirmButton: false,
+            didOpen: () => {
+                const container = document.getElementById('swal-fueling-form');
+                const root = createRoot(container);
+                // Envolva o RegisterFueling com AuthProvider
+                root.render(
+                    <AuthProvider>
+                        <RegisterFueling onClose={() => Swal.close()} />
+                    </AuthProvider>
+                );
+            },
+            willClose: () => {
+                const container = document.getElementById('swal-fueling-form');
+                if (container) {
+                    const root = findDOMNode(container);
+                    if (root) {
+                        root.unmount();
+                    }
+                }
+            }
+        });
     };
-
-    const handleCloseFuelModal = () => {
-        setShowFuelModal(false);
-        // Recupere os dados do formulário aqui, se necessário
-    }
-
 
     // Simulação de dados
     useEffect(() => {
@@ -66,21 +88,8 @@ const Home = () => {
         <div className="home-container">
 
             <div className="row">
-            <div className="widgets-container col-4">
-                {cities.map((city, index) => (
-                <WeatherClock key={index} city={city} apiKey={apiKey} />
-                ))}
-            </div>
-
-
-            <div className="weather-widget col-8">
-                <h2>Olá, <strong>Maruk</strong>, bem-vindo ao diário de moto!</h2>
-                {location && location.latitude && location.longitude && (
-                        <WeatherCard latitude={location.latitude} longitude={location.longitude} />
-                    )}
-                {error && <p className="text-danger">Erro: {error}</p>}
-            </div>
-          
+            <UserInfoCard />    
+            <WeatherTimerCard />      
             </div>
 
             <div className="mt-4 mb-4 d-flex justify-content-start gap-3">
@@ -90,24 +99,10 @@ const Home = () => {
             </Button>
 
             {/* Botão Registrar Abastecimento */}
-            <Button
-                variant="warning"
-                className="btn-icon"
-                onClick={handleFuelRegister}
-            >
-                <FaGasPump className="me-2" /> Registrar Abastecimento
+            <Button variant="warning" className="btn-icon" onClick={handleFuelRegister}>
+               <FaGasPump className="me-2" /> Registrar Abastecimento
             </Button>
 
-            {/* ... outro código */}
-
-            <Modal show={showFuelModal} onHide={handleCloseFuelModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Registrar Abastecimento</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <RegisterFueling onClose={handleCloseFuelModal} /> {/* Removido userId={userId} */}
-                </Modal.Body>
-            </Modal>
 
             {/* Botão GPS */}
             <Button variant="info" className="btn-icon">
@@ -118,20 +113,7 @@ const Home = () => {
             <GPSDistanceTracker />
         </div>
             
-            <div className="mb-4 d-flex align-items-center justify-content-between">
-                <DropdownButton title={`Período: ${selectedPeriod}`} onSelect={handlePeriodChange}>
-                    <Dropdown.Item eventKey="Semana">Semana</Dropdown.Item>
-                    <Dropdown.Item eventKey="Mês">Mês</Dropdown.Item>
-                    <Dropdown.Item eventKey="Ano">Ano</Dropdown.Item>
-                </DropdownButton>
-                <Form.Control
-                    type="date"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    placeholder="Selecione uma data"
-                    style={{ maxWidth: "200px" }}
-                />
-            </div>
+           
 
             <Row className="mb-4">
                     {[
@@ -169,7 +151,7 @@ const Home = () => {
             <Row className="button-grid">
                 {[
                     { to: "/listar-ganhos", icon: FaList, text: "Lista" },
-                    { to: "/listar-abastecimento", icon: FaList, text: "Lista" },
+                    { to: "/listar-ganhos", icon: FaList, text: "Lista" },
                     { to: "/graph-panel", icon: FaChartBar, text: "Gráficos" },
                     { to: "/registrar-ganhos", icon: FaCalendarPlus, text: "Registrar" },
                     { to: "/config", icon: FaCog, text: "Configurações" },

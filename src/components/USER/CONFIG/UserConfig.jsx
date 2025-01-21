@@ -1,11 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Card } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faPhoneAlt, faIdCard } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPhoneAlt } from '@fortawesome/free-solid-svg-icons';
+import { useAuth } from '../../USER/Auth/AuthContext';
+import { getUserConfig } from '../../DB/firebaseServices'; // Importe a função
 
 const UserConfig = ({ saveData }) => {
+    const { currentUser } = useAuth();
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
+
+    useEffect(() => {
+        const fetchUserConfig = async () => {
+            if (currentUser) {
+                try {
+                    const config = await getUserConfig(currentUser.uid);
+                    if (config) {
+                        setName(config.name || '');
+                        setPhone(config.phone || '');
+                    }
+                } catch (error) {
+                    console.error("Erro ao carregar configurações do usuário:", error);
+                }
+            }
+        };
+
+        fetchUserConfig();
+    }, [currentUser]);
 
     const handleSave = () => {
         saveData({

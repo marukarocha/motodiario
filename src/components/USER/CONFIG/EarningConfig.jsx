@@ -1,19 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Cleave from 'cleave.js/react';
+import { useAuth } from '../../USER/Auth/AuthContext';
+import { getEarningsConfig } from '../../DB/firebaseServices'; // Importe a função
+
 
 const EarningConfig = ({ saveData }) => {
+    const { currentUser } = useAuth();
     const [monthlyGoal, setMonthlyGoal] = useState('');
     const [dailyHours, setDailyHours] = useState('');
     const [fixedCosts, setFixedCosts] = useState([
         { id: 1, description: '', value: '', frequency: 'mensal', monthlyCost: 0, annualCost: 0 },
     ]);
 
+
+    useEffect(() => {
+        const fetchEarningsConfig = async () => {
+            if (currentUser) {
+                try {
+                    const config = await getEarningsConfig(currentUser.uid);
+                    if (config) {
+                        setMonthlyGoal(config.monthlyGoal || '');
+                        setDailyHours(config.dailyHours || '');
+                        setFixedCosts(config.fixedCosts || [
+                            { id: 1, description: '', value: '', frequency: 'mensal', monthlyCost: 0, annualCost: 0 },
+                        ]);
+                    }
+                } catch (error) {
+                    console.error("Erro ao carregar configurações de ganhos:", error);
+                }
+            }
+        };
+
+        fetchEarningsConfig();
+    }, [currentUser]);
+
+
     const handleSave = () => {
+        const formattedFixedCosts = fixedCosts.map(cost => ({
+            ...cost,
+            value: parseFloat(cost.value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0
+        }));
+
         saveData({
-            monthlyGoal,
+            monthlyGoal: parseFloat(monthlyGoal.replace(/[^\d,-]/g, '').replace(',', '.')) || 0,
             dailyHours,
-            fixedCosts: fixedCosts.filter((cost) => cost.description && cost.value),
+            fixedCosts: formattedFixedCosts.filter((cost) => cost.description && cost.value),
         });
     };
 
