@@ -20,6 +20,10 @@ import RegisterBike from './components/BIKE/RegisterBike';
 import ViewBike from './components/BIKE/ViewBike';
 import SpeedometerTransition from './components/UI/PageTransition';
 import { AuthProvider } from './components/USER/Auth/AuthContext'; // Importe o AuthProvider
+
+//dados estatisticos
+import { SpeedInsights } from "@vercel/speed-insights/react"
+
 function App() {
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(false);
@@ -28,6 +32,7 @@ function App() {
     <AuthProvider>
     <div className="App">
       <Router>
+      <SpeedInsights />
         <Header userName={currentUser?.email || "Visitante"} />
         {/* Passe currentUser para AppRoutes */}
         <AppRoutes loading={loading} setLoading={setLoading} currentUser={currentUser} />
